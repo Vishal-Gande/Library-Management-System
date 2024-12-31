@@ -16,6 +16,9 @@ public class client {
         libMgr.add_book(26, "Let's talk Money", "Monika Halan", 2018, "978-1-345-45985-7");
         libMgr.add_book(27, "The Psychology of Money", "Morgan Housel", 2020, "1387580086");
 
+        libMgr.list_books();
+        libMgr.list_members();
+
 
 
         libMgr.remove_member(4565);

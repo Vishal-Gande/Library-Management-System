@@ -19,12 +19,15 @@ public class libraryManager {
         books = new HashMap<Integer, book>();
     }
 
-    public void add_member(String name, int age, int member_id, String email, String mobile){
+    // adding word synchronized to handle concurrency
+
+    public synchronized void add_member(String name, int age, int member_id, String email, String mobile){
         member m = new member(name, age, member_id, email, mobile);
         members.put(member_id, m);
+        System.out.println("Added member " + m.name);
     }
 
-    public void remove_member(int member_id){
+    public synchronized void remove_member(int member_id){
 
         // taking back all his borrowed books
         for (int book_id : members.get(member_id).borrowed){
@@ -32,19 +35,22 @@ public class libraryManager {
         }
 
         members.remove(member_id);
+        System.out.println("Removed member: " + member_id);
     }
 
-    public void add_book(int id,String title, String author, int publicationYear, String ISBN){
+    public synchronized void add_book(int id,String title, String author, int publicationYear, String ISBN){
 
         book b = new book(id, title, author, publicationYear, ISBN);
         books.put(id,b);
+        System.out.println("Book "+ title + " with id " + id + " added to the library");
     }
 
-    public void remove_book(int id){
+    public synchronized void remove_book(int id){
         books.remove(id);
+        System.out.println("book with id " + id + " removed");
     }
 
-    public void borrow_book(int member_id, int book_id){
+    public synchronized void borrow_book(int member_id, int book_id){
 
         if(members.get(member_id).borrowed.size() < max_per_member )
         {
@@ -67,7 +73,7 @@ public class libraryManager {
 
     }
 
-    public void return_book(int book_id, int member_id){
+    public synchronized void return_book(int book_id, int member_id){
         // make book available again
 
         books.get(book_id).status = book_status.AVAILABLE;
@@ -76,5 +82,21 @@ public class libraryManager {
 //        1.	remove(int index) - Removes the element at the given index.
 //        2.	remove(Object o) - Removes the first occurrence of the specified object.
 
+        System.out.println("Returned book " + book_id);
+
+    }
+
+    public void list_books(){
+        System.out.println("Here's the list of books:");
+        for(book b : books.values()){
+            System.out.println("- "+ b.title);
+        }
+    }
+
+    public void list_members(){
+        System.out.println("Here's the list of members:");
+        for(member m : members.values()){
+            System.out.println("- "+ m.name);
+        }
     }
 }
