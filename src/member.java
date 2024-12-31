@@ -15,6 +15,7 @@ public class member {
         this.member_id = member_id;
         this.email = email;
         this.mobile = mobile;
+        borrowed = new ArrayList<>();
     }
 
 }
