@@ -3,11 +3,10 @@ import java.util.Map;
 
 public class libraryManager {
 
-    // make this class singleton
-    public int max_per_member = 2;
+    // make this class singleton is req ?
+    
     public Map<Integer, member> members ; // memberID as key, member as value
     public Map<Integer, book> books ; // title as key, book as value
-
     public libraryManager() {
 //          why are we initialising again?
 //        Map<Integer, member> members --> here you are declaring a reference to a Map object.
@@ -52,7 +51,7 @@ public class libraryManager {
 
     public synchronized void borrow_book(int member_id, int book_id){
 
-        if(members.get(member_id).borrowed.size() < max_per_member )
+        if(members.get(member_id).borrowed.size() < constants.max_per_member )
         {
             if(books.containsKey(book_id) && books.get(book_id).status == book_status.AVAILABLE){
 
