@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class libraryManager {
 
@@ -29,12 +30,16 @@ public class libraryManager {
     public synchronized void remove_member(int member_id){
 
         // taking back all his borrowed books
-        for (int book_id : members.get(member_id).borrowed){
-                this.return_book(book_id,member_id);
+        try {
+            for (int book_id : members.get(member_id).borrowed) {
+                this.return_book(book_id, member_id);
+            }
+            members.remove(member_id);
+            System.out.println("Removed member: " + member_id);
         }
-
-        members.remove(member_id);
-        System.out.println("Removed member: " + member_id);
+        catch(NullPointerException e){ // as borrowed will be null
+            System.out.println("Member not found . removing member is pointless now");
+        }
     }
 
     public synchronized void add_book(int id,String title, String author, int publicationYear, String ISBN){
@@ -45,43 +50,57 @@ public class libraryManager {
     }
 
     public synchronized void remove_book(int id){
-        books.remove(id);
-        System.out.println("book with id " + id + " removed");
+
+
+        if(books.remove(id) != null) {
+            System.out.println("book with id " + id + " removed");
+        }
+        else
+            System.out.println("book with id " + id + " not found");
+
     }
 
-    public synchronized void borrow_book(int member_id, int book_id){
+    public synchronized void borrow_book(int member_id, int book_id) {
 
-        if(members.get(member_id).borrowed.size() < constants.max_per_member )
-        {
-            if(books.containsKey(book_id) && books.get(book_id).status == book_status.AVAILABLE){
+        try {
+            if (members.get(member_id).borrowed.size() < constants.max_per_member) {
+                if (books.containsKey(book_id) && books.get(book_id).status == book_status.AVAILABLE) {
 
-                books.get(book_id).status = book_status.NOT_AVAILABLE; // Change status
-                members.get(member_id).borrowed.add(book_id);
+                    books.get(book_id).status = book_status.NOT_AVAILABLE; // Change status
+                    members.get(member_id).borrowed.add(book_id);
 
-                System.out.println("Library member "+ members.get(member_id).name + "(" +
-                        members.get(member_id).borrowed.size() + ") borrowed book" +
-                        books.get(book_id).title + "(" + book_id + ")");
+                    System.out.println("Library member " + members.get(member_id).name + "(" +
+                            members.get(member_id).borrowed.size() + ") borrowed book " +
+                            books.get(book_id).title + "(" + book_id + ")");
+                } else {
+                    System.out.println("Sorry! Book isn't available");
+                }
+            } else {
+                System.out.println("You've exceeded max books allowed per member. Don't be kanjoos, return a few");
             }
-            else{
-                System.out.println("Sorry! Book isn't available");
-            }
-        }
-        else{
-            System.out.println("You've exceeded max books allowed per member. Don't be kanjoos, return a few");
-        }
 
+        }
+        catch(NullPointerException e){
+            System.out.println("Member not found, borrow failed");
+        }
     }
 
     public synchronized void return_book(int book_id, int member_id){
         // make book available again
 
-        books.get(book_id).status = book_status.AVAILABLE;
-        members.get(member_id).borrowed.remove(Integer.valueOf(book_id));
+        try {
+            books.get(book_id).status = book_status.AVAILABLE;
+            members.get(member_id).borrowed.remove(Integer.valueOf(book_id));
 //        In Java, ArrayList has two overloaded remove() methods:
 //        1.	remove(int index) - Removes the element at the given index.
 //        2.	remove(Object o) - Removes the first occurrence of the specified object.
 
-        System.out.println("Returned book " + book_id);
+            System.out.println("Returned book " + book_id);
+        }
+        catch(NullPointerException e){
+            System.out.println("Member/book not found, returning book failed");
+        }
+
 
     }
 

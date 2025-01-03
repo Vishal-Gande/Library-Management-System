@@ -21,13 +21,13 @@ public class client {
 
 
 
-        libMgr.remove_member(4565);
-        //libMgr.remove_book(24);
+        libMgr.remove_member(4566);
+        libMgr.remove_book(29);
 
-        libMgr.borrow_book(4563, 25);
+        libMgr.borrow_book(4560, 25);
         libMgr.borrow_book(4563, 26);
 
-        libMgr.return_book(25, 4563);
+        libMgr.return_book(24, 4560);
         libMgr.borrow_book(4563, 24);
 
 
