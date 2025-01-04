@@ -4,19 +4,31 @@ import java.util.NoSuchElementException;
 
 public class libraryManager {
 
+    public static libraryManager lb = null;
     // make this class singleton is req ?
     
     public Map<Integer, member> members ; // memberID as key, member as value
     public Map<Integer, book> books ; // title as key, book as value
-    public libraryManager() {
-//          why are we initialising again?
+
+    //          why are we initialising again?
 //        Map<Integer, member> members --> here you are declaring a reference to a Map object.
 //        However, this does not create an actual Map. At this point, members is null, which
 //        means it does not point to any valid object in memory.
 //        If you try to use this null reference, such as calling members.put(...), you’ll get a NullPointerException.
 
-        members = new HashMap<Integer, member>();
-        books = new HashMap<Integer, book>();
+    private libraryManager() {} // make it private to make this class singleton
+
+    public static libraryManager getInstance(){
+        if(lb == null){  // first check
+            synchronized(libraryManager.class){ // locking the class
+                if(lb == null) { // second check, as multiple threads might've cleared the first if condition
+                    lb = new libraryManager();
+                }
+            }
+        }
+        lb.members = new HashMap<Integer, member>();
+        lb.books = new HashMap<Integer, book>();
+        return lb;
     }
 
     // adding word synchronized to handle concurrency

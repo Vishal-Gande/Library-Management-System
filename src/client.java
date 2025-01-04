@@ -5,7 +5,7 @@ public class client {
 
     public static void main(String[] args) {
 
-        libraryManager libMgr = new libraryManager();
+        libraryManager libMgr = libraryManager.getInstance();
 
         libMgr.add_member("vish", 27, 4563, "vish@gmail.com", "9123456781");
         libMgr.add_member("prav", 27, 4564, "prav@gmail.com", "9123456782");
@@ -18,7 +18,6 @@ public class client {
 
         libMgr.list_books();
         libMgr.list_members();
-
 
 
         libMgr.remove_member(4566);

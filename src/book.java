@@ -14,6 +14,5 @@ public class book {
         this.publicationYear = publicationYear;
         this.ISBN = ISBN;
         this.status = book_status.AVAILABLE;
-
     }
 }
